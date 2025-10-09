@@ -1,0 +1,8 @@
+[headnode]
+headnode ansible_host={{ hostvars['headnode'].ansible_default_ipv4.address }} ansible_user=vagrant ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key
+
+[compute]
+{% for host in groups['compute'] %}
+{{ host }} ansible_host={{ hostvars[host].ansible_default_ipv4.address }} ansible_user=vagrant ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key
+{% endfor %}
+

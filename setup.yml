@@ -1,0 +1,19 @@
+---
+- name: Basic Ansible practice
+  hosts: all
+  become: yes
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install curl
+      apt:
+        name: curl
+        state: present
+
+    - name: Create a test file
+      file:
+        path: /tmp/ansible_test_playbook.txt
+        state: touch
+

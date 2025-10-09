@@ -1,0 +1,12 @@
+# Vagrant + Ansible
+.vagrant/
+*.retry
+*.log
+
+# SSH keys
+**/private_key
+**/*.pem
+
+# Python / system
+__pycache__/
+*.pyc

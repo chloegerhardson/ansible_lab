@@ -1,0 +1,20 @@
+---
+- name: Create users on all nodes
+  hosts: all
+  become: yes
+  vars:
+    users:
+      - name: alice
+        groups: sudo
+      - name: bob
+        groups: ""
+  tasks:
+    - name: Ensure users exist
+      user:
+        name: "{{ item.name }}"
+        groups: "{{ item.groups }}"
+        shell: /bin/bash
+        state: present
+        create_home: yes
+      loop: "{{ users }}"
+
