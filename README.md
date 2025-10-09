@@ -7,7 +7,7 @@ This repository contains an Ansible lab setup used for learning, experimenting, 
 ## Project Overview
 
 The goal of this lab is to: 
-- Build hands-onfamiliarity with **Ansible basics**.
+- Build hands-on familiarity with **Ansible basics**.
 - Practice **infrastrucutre as code** using Vagrant and Libvirt.
 - Experiment with **playbooks**, **inventory management**, and **roles**.
 - Explore **dynamic inventory**, **templating**, and **user-management**.
@@ -69,3 +69,8 @@ Run any playbook with:
 ```bash
 ansible-playbook -i hosts <playbook-name.yml>
 ```
+
+### Troubleshooting
+
+- VM IPs chagne on rebuild, the dynamic inventory playbook should auto-update your `hosts` file
+- If SSH connection fails, ensure the VM network is active and autostart is enabled. Use `sudo virsh net-list --all` to see network information.
