@@ -2,53 +2,61 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  # Use a box that supports the libvirt provider
+  # Base box compatible with libvirt
   config.vm.box = "generic/ubuntu2204"
-  config.vm.provider :libvirt do |libvirt|
-    libvirt.memory = 2048
-    libvirt.cpus = 2
-  end
+  config.vm.box_check_update = true
 
+  # Disable default synced folder to speed up and avoid prompts
+  config.vm.synced_folder ".", "/vagrant", disabled: true
 
-  BOX_NAME = "generic/ubuntu2204"
-  NETWORK_TYPE = "dhcp"
+  # Define machines
+  nodes = {
+    "headnode" => { memory: 2048, cpus: 2 },
+    "compute1" => { memory: 2048, cpus: 2 },
+    "compute2" => { memory: 2048, cpus: 2 }
+  }
 
+  nodes.each do |name, opts|
+    config.vm.define name do |node|
+      node.vm.hostname = name
 
-  config.vm.define "headnode" do |head|
-    head.vm.box = BOX_NAME
-    head.vm.hostname = "headnode"
-    head.vm.network "private_network", type: NETWORK_TYPE
-
-    head.vm.provider :libvirt do |libvirt|
-      libvirt.memory = 2048
-      libvirt.cpus = 2
-    end
-
-    head.vm.provision "shell", inline: <<-SHELL
-      apt-get update -y
-      apt-get upgrade -y
-      apt-get install -y openssh-server ansible python3
-      systemctl enable --now ssh
-    SHELL
-  end
-
-  (1..2).each do |i|
-    config.vm.define "compute#{i}" do |compute|
-      compute.vm.box = BOX_NAME
-      compute.vm.hostname = "compute#{i}"
-      compute.vm.network "private_network", type: NETWORK_TYPE
-
-      compute.vm.provider :libvirt do |libvirt|
-        libvirt.memory = 1024
-        libvirt.cpus = 1
+      # Provider-specific configuration for libvirt
+      node.vm.provider :libvirt do |lv|
+        lv.memory = opts[:memory]
+        lv.cpus   = opts[:cpus]
+        # Uncomment to adjust storage size, network, etc.
+        # lv.storage :file, :size => '20G'
+        # node.vm.network "private_network", ip: "192.168.121.10", libvirt__network_name: "vagrant-libvirt"
       end
 
-      compute.vm.provision "shell", inline: <<-SHELL
-        apt-get update -y
-        apt-get upgrade -y
-        apt-get install -y openssh-server ansible python3
-        systemctl enable --now ssh
+      # Ensure Python is present for Ansible on minimal images
+      node.vm.provision "shell", inline: <<-SHELL
+        set -eux
+        if command -v apt-get >/dev/null 2>&1; then
+          sudo apt-get update -y
+          sudo apt-get install -y python3
+        elif command -v dnf >/dev/null 2>&1; then
+          sudo dnf install -y python3
+        elif command -v yum >/dev/null 2>&1; then
+          sudo yum install -y python3
+        fi
       SHELL
     end
+  end
+
+  # Run Ansible once after all machines are up
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "site.yml"
+    ansible.become = true
+    ansible.limit = "all"
+
+    # Group machines for targeted plays
+    ansible.groups = {
+      "head" => ["headnode"],
+      "compute" => ["compute1", "compute2"]
+    }
+
+    # Increase verbosity if needed: "v", "vv", "vvv"
+    # ansible.verbose = 'v'
   end
 end
