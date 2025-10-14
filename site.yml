@@ -1,0 +1,18 @@
+---
+# Consolidated site playbook for Vagrant libvirt cluster
+# Order: ensure Python, update dynamic inventory, base setup, examples
+
+- name: Ensure Python present on all nodes (idempotent)
+  hosts: all
+  gather_facts: false
+  become: yes
+  tasks:
+    - name: Install python3
+      package:
+        name: python3
+        state: present
+
+- import_playbook: update-ip.yml
+- import_playbook: setup.yml
+- import_playbook: deploy_motd.yml
+- import_playbook: create_users.yml
