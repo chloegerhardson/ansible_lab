@@ -14,5 +14,3 @@
 
 - import_playbook: update-ip.yml
 - import_playbook: setup.yml
-- import_playbook: deploy_motd.yml
-- import_playbook: create_users.yml
