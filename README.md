@@ -21,7 +21,7 @@ The goal of this lab is to:
 
 ## Getting Started
 
-### Prereequisites
+### Prerequisites
 
 You'll need:
 - libvirt qemu kvm
