@@ -64,7 +64,7 @@ ansible -i hosts all -m ping
 - `motd.yml` Configures a message of the day (MOTD) banner for all nodes
 - `create_users.yml` Creates local users on each node
 - `update_ip.yml` Generates or updates a host inventory dynamically
-   - this playbook gets applied using the Vagrantfile. It updates the hosts file will automatically, using `templates/host.j2`. Becasue the our VM's IPs are generated dynamically with each build, this is a [jinja](https://jinja.palletsprojects.com/en/stable/) templated file that loads the correct VM IP information into our `hosts` file.
+   - this playbook gets applied using the Vagrantfile. It updates the hosts file automatically, using `templates/host.j2`. Becasue our VM's IPs are generated dynamically with each build, this [jinja](https://jinja.palletsprojects.com/en/stable/) templated file loads the correct VM IP information into our `hosts` file.
 
 Run any playbook with:
 ```bash
