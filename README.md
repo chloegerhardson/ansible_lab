@@ -63,12 +63,15 @@ ansible -i hosts all -m ping
 ### Example Playbooks
 - `motd.yml` Configures a message of the day (MOTD) banner for all nodes
 - `create_users.yml` Creates local users on each node
-- `dynamic_inventory.yml` Generates or updates a host inventory dynamically
+- `update_ip.yml` Generates or updates a host inventory dynamically
+   - this playbook gets applied using the Vagrantfile. It updates the hosts file will automatically, using `templates/host.j2`. Becasue the our VM's IPs are generated dynamically with each build, this is a [jinja](https://jinja.palletsprojects.com/en/stable/) templated file that loads the correct VM IP information into our `hosts` file.
 
 Run any playbook with:
 ```bash
 ansible-playbook -i hosts <playbook-name.yml>
 ```
+
+Test different playbooks and how they work by running the playbook, and `vagrant ssh`ing into a node to see the configuration change.
 
 ### Troubleshooting
 
