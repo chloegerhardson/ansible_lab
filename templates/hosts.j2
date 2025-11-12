@@ -1,5 +1,5 @@
-[headnode]
-headnode ansible_host={{ hostvars['headnode'].ansible_default_ipv4.address }} ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/headnode/libvirt/private_key
+[head]
+head ansible_host={{ hostvars['head'].ansible_default_ipv4.address }} ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/head/libvirt/private_key
 
 [compute]
 {% for host in groups['compute'] %}

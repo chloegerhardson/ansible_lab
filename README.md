@@ -14,7 +14,7 @@ The goal of this lab is to:
 
 | Node       | Role         | Description                          |
 |-------------|--------------|--------------------------------------|
-| headnode    | Controller   | Runs Ansible and manages other nodes |
+| head    | Controller   | Runs Ansible and manages other nodes |
 | compute1    | Worker Node  | Target node for Ansible tasks        |
 | compute2    | Worker Node  | Target node for Ansible tasks        |
 
@@ -39,7 +39,7 @@ vagrant up
 ```
 
 Vagrant will create:
-- `headnode`
+- `head`
 - `compute1`
 - `compute2`
 

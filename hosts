@@ -1,6 +1,6 @@
-[headnode]
-headnode ansible_host=192.168.121.133 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/headnode/libvirt/private_key
+[head]
+head ansible_host=192.168.121.126 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/head/libvirt/private_key
 
 [compute]
-compute1 ansible_host=192.168.121.66 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/compute1/libvirt/private_key
-compute2 ansible_host=192.168.121.111 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/compute2/libvirt/private_key
+compute1 ansible_host=192.168.121.72 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/compute1/libvirt/private_key
+compute2 ansible_host=192.168.121.223 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/compute2/libvirt/private_key
