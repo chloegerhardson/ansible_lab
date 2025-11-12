@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
 
   # Define machines
   nodes = {
-    "headnode" => { memory: 2048, cpus: 2 },
+    "head" => { memory: 2048, cpus: 2 },
     "compute1" => { memory: 2048, cpus: 2 },
     "compute2" => { memory: 2048, cpus: 2 }
   }
@@ -52,7 +52,7 @@ Vagrant.configure("2") do |config|
 
     # Group machines for targeted plays
     ansible.groups = {
-      "head" => ["headnode"],
+      "head" => ["head"],
       "compute" => ["compute1", "compute2"]
     }
 
