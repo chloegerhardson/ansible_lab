@@ -12,12 +12,12 @@ The goal of this lab is to:
 - Experiment with **playbooks**, **inventory management**, and **roles**.
 - Explore **dynamic inventory**, **templating**, and **user-management**.
 
-| Node       | Role         | Description                          |
+| Node        | Role         | Description                          |
 |-------------|--------------|--------------------------------------|
-| head    | Controller   | Runs Ansible and manages other nodes |
+| head        | Controller   | Runs Ansible and manages other nodes |
 | compute1    | Worker Node  | Target node for Ansible tasks        |
 | compute2    | Worker Node  | Target node for Ansible tasks        |
-
+| webserver   | Apache Node  | Runs Apache web server               |
 
 ## Getting Started
 
@@ -42,6 +42,7 @@ Vagrant will create:
 - `head`
 - `compute1`
 - `compute2`
+- `webserver`
 
 Each VM is managed by `libvirt`
 
@@ -83,5 +84,9 @@ Test different playbooks and how they work by running the playbook, and `vagrant
 
 ### Troubleshooting
 
-- VM IPs chagne on rebuild, the dynamic inventory playbook should auto-update your `hosts` file
+- VM IPs chagne on rebuild, run the `update_ips.sh` script to update the `hosts` file
 - If SSH connection fails, ensure the VM network is active and autostart is enabled. Use `sudo virsh net-list --all` to see network information.
+- Vagrant may also fail if a node domain is already in use. run `sudo virsh list --all --name` to see a list of domains.
+  - run `sudo virsh destroy <domain name>` and `sudo virsh undefine <domain name> to clear any stale domains in use.
+  - clear old machines listed under `./.vagrant/machines/`
+  - run `vagrant destroy` and `vagrant up` to fully resolve the issue
