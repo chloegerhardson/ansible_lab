@@ -60,11 +60,15 @@ vagrant ssh <node-name>
 ansible -i hosts all -m ping
 ```
 
+### Step 4.0: Update IPs
+Before executing your ansible commands, you may need to run the `update_ips` script. After this script executes, you will be able to run Step 4: Verify Ansible Connectivity. This script uses `templates/host.j2` to update the `hosts` file with accurtate IPs. Becasue our VM's IPs are generated dynamically with each build, this [jinja](https://jinja.palletsprojects.com/en/stable/) templated file loads the correct VM IP information into our `hosts` file.
+```
+sh update_ips.sh
+```
+
 ### Example Playbooks
 - `motd.yml` Configures a message of the day (MOTD) banner for all nodes
 - `create_users.yml` Creates local users on each node
-- `update_ip.yml` Generates or updates a host inventory dynamically
-   - this playbook gets applied using the Vagrantfile. It updates the hosts file automatically, using `templates/host.j2`. Becasue our VM's IPs are generated dynamically with each build, this [jinja](https://jinja.palletsprojects.com/en/stable/) templated file loads the correct VM IP information into our `hosts` file.
 
 Run any playbook with:
 ```bash
