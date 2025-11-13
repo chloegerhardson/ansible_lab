@@ -63,7 +63,7 @@ ansible -i hosts all -m ping
 ### Step 4.0: Update IPs
 Before executing your ansible commands, you may need to run the `update_ips` script. After this script executes, you will be able to run Step 4: Verify Ansible Connectivity. This script uses `templates/host.j2` to update the `hosts` file with accurtate IPs. Becasue our VM's IPs are generated dynamically with each build, this [jinja](https://jinja.palletsprojects.com/en/stable/) templated file loads the correct VM IP information into our `hosts` file.
 ```
-sh scripts/update_ips.sh
+sh update_ips.sh
 ```
 
 ### Example Playbooks
