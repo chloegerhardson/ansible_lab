@@ -2,6 +2,7 @@
 .vagrant/
 *.retry
 *.log
+hosts
 
 # SSH keys
 **/private_key
