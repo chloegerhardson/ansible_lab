@@ -13,7 +13,8 @@ Vagrant.configure("2") do |config|
   nodes = {
     "head" => { memory: 2048, cpus: 2 },
     "compute1" => { memory: 2048, cpus: 2 },
-    "compute2" => { memory: 2048, cpus: 2 }
+    "compute2" => { memory: 2048, cpus: 2 },
+    "webserver" => {memory: 2048, cpus: 2 }
   }
 
   nodes.each do |name, opts|
@@ -53,7 +54,8 @@ Vagrant.configure("2") do |config|
     # Group machines for targeted plays
     ansible.groups = {
       "head" => ["head"],
-      "compute" => ["compute1", "compute2"]
+      "compute" => ["compute1", "compute2"],
+      "webservers" => ["webserver"]
     }
 
     # Increase verbosity if needed: "v", "vv", "vvv"

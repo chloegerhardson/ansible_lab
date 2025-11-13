@@ -108,8 +108,25 @@ for compute_host in compute1 compute2; do
         fi
         echo "${compute_host} ansible_host=${COMPUTE_IP} ansible_user=vagrant ansible_ssh_private_key_file=${COMPUTE_KEY}" >> "$TEMP_FILE"
     fi
-done
+    done
 
+echo "" >> "$TEMP_FILE"
+echo "[webservers]" >> "$TEMP_FILE"
+
+# Get webserver IP and key
+WEBSERVER_IP=$(get_ip_for_host "webserver")
+WEBSERVER_KEY=$(get_key_for_host "webserver")
+
+if [ -z "$WEBSERVER_IP" ]; then
+    echo "Warning: Could not find IP for webserver"
+else
+    # Convert absolute path to relative if it's in the project directory
+    if [[ "$WEBSERVER_KEY" == "$SCRIPT_DIR"* ]]; then
+        WEBSERVER_KEY="${WEBSERVER_KEY#$SCRIPT_DIR}"
+        WEBSERVER_KEY="${WEBSERVER_KEY#/}"  # Remove leading slash if present
+    fi
+    echo "webserver ansible_host=${WEBSERVER_IP} ansible_user=vagrant ansible_ssh_private_key_file=${WEBSERVER_KEY}" >> "$TEMP_FILE"
+fi
 
 # Replace the hosts file
 mv "$TEMP_FILE" "$HOSTS_FILE"
