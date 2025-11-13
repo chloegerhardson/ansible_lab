@@ -87,6 +87,6 @@ Test different playbooks and how they work by running the playbook, and `vagrant
 - VM IPs chagne on rebuild, run the `update_ips.sh` script to update the `hosts` file
 - If SSH connection fails, ensure the VM network is active and autostart is enabled. Use `sudo virsh net-list --all` to see network information.
 - Vagrant may also fail if a node domain is already in use. run `sudo virsh list --all --name` to see a list of domains.
-  - run `sudo virsh destroy <domain name>` and `sudo virsh undefine <domain name> to clear any stale domains in use.
+  - run `sudo virsh destroy <domain name>` and `sudo virsh undefine <domain name>` to clear any stale domains in use.
   - clear old machines listed under `./.vagrant/machines/`
   - run `vagrant destroy` and `vagrant up` to fully resolve the issue
