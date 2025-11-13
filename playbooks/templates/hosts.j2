@@ -6,3 +6,8 @@ head ansible_host={{ hostvars['head'].ansible_default_ipv4.address }} ansible_us
 {{ host }} ansible_host={{ hostvars[host].ansible_default_ipv4.address }} ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/{{ host }}/libvirt/private_key
 {% endfor %}
 
+[webservers]
+{% for host in groups['webservers'] %}
+{{ host }} ansible_host={{ hostvars[host].ansible_default_ipv4.address }} ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/{{ host }}/libvirt/private_key
+{% endfor %}
+

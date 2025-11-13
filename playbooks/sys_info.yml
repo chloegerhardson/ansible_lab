@@ -1,0 +1,7 @@
+---
+- name: Gather system info
+  hosts: all
+  tasks:
+    - name: Display OS information
+      debug:
+        msg: "{{ ansible_distribution }} {{ ansible_distribution_version }}"
