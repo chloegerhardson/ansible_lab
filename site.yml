@@ -12,5 +12,4 @@
         name: python3
         state: present
 
-- import_playbook: update-ip.yml
 - import_playbook: setup.yml
