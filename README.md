@@ -67,12 +67,14 @@ sh update_ips.sh
 ```
 
 ### Example Playbooks
+- `site.yml` Serves as the main entry point, gets run during Vagrant build, and imports `setup.yml` to install Python and other packages on the nodes.
+- `setup.yml` Gets imported to `site.yml` to install basic packages.
 - `motd.yml` Configures a message of the day (MOTD) banner for all nodes
 - `create_users.yml` Creates local users on each node
 
 Run any playbook with:
 ```bash
-ansible-playbook -i hosts <playbook-name.yml>
+ansible-playbook -i hosts <playbooks/playbook-name.yml>
 ```
 
 Test different playbooks and how they work by running the playbook, and `vagrant ssh`ing into a node to see the configuration change.

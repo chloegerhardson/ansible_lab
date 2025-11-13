@@ -97,7 +97,7 @@ echo "[compute]" >> "$TEMP_FILE"
 for compute_host in compute1 compute2; do
     COMPUTE_IP=$(get_ip_for_host "$compute_host")
     COMPUTE_KEY=$(get_key_for_host "$compute_host")
-    
+
     if [ -z "$COMPUTE_IP" ]; then
         echo "Warning: Could not find IP for $compute_host"
     else
