@@ -61,7 +61,7 @@ ansible -i hosts all -m ping
 ```
 
 ### Step 4.0: Update IPs
-Before executing your ansible commands, you may need to run the `update_ips` script. After this script executes, you will be able to run Step 4: Verify Ansible Connectivity. This script is based on `templates/host.j2` to update the `hosts` file with accurtate IPs. Becasue our VM's IPs are generated dynamically with each build, this [jinja](https://jinja.palletsprojects.com/en/stable/) templated file loads the correct VM IP information into our `hosts` file.
+Before executing your ansible commands, you may need to run the `update_ips` script. After this script executes, you will be able to run Step 4: Verify Ansible Connectivity. This script is based on `playbooks/templates/host.j2` to update the `hosts` file with accurtate IPs. Becasue our VM's IPs are generated dynamically with each build, this [jinja](https://jinja.palletsprojects.com/en/stable/) templated file loads the correct VM IP information into our `hosts` file.
 ```
 sh update_ips.sh
 ```
@@ -71,6 +71,8 @@ sh update_ips.sh
 - `setup.yml` Gets imported to `site.yml` to install basic packages.
 - `motd.yml` Configures a message of the day (MOTD) banner for all nodes
 - `create_users.yml` Creates local users on each node
+- `sys_info.yml` Provides system information for each node
+- `deploy_homepage.yml` Deploys a basic Apache server and homepage. Visit the page by vagrant-ssh-ing into the `webserver` node and running `hostname -I` to get it's IP, and then visit `http://<webserver-ip>` to view the site's contents.
 
 Run any playbook with:
 ```bash
