@@ -128,6 +128,14 @@ else
     echo "webserver ansible_host=${WEBSERVER_IP} ansible_user=vagrant ansible_ssh_private_key_file=${WEBSERVER_KEY}" >> "$TEMP_FILE"
 fi
 
+echo "" >> "$TEMP_FILE"
+echo "[wazuh_server]" >> "$TEMP_FILE"
+
+# Wazuh server uses head node
+if [ -n "$HEAD_IP" ]; then
+    echo "head ansible_host=${HEAD_IP} ansible_user=vagrant ansible_ssh_private_key_file=${HEAD_KEY}" >> "$TEMP_FILE"
+fi
+
 # Replace the hosts file
 mv "$TEMP_FILE" "$HOSTS_FILE"
 

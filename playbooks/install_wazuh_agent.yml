@@ -1,0 +1,65 @@
+---
+- name: Install and configure Wazuh Agent
+  hosts: all:!wazuh_server
+  become: yes
+
+  vars:
+    wazuh_manager_ip: "{{ hostvars[groups['wazuh_server'][0]]['ansible_host'] }}"
+    wazuh_agent_group: "default"
+
+  tasks:
+    - name: Install dependencies
+      apt:
+        name:
+          - curl
+          - apt-transport-https
+          - gnupg
+        state: present
+        update_cache: yes
+      tags: ['install']
+
+    - name: Add Wazuh GPG key
+      apt_key:
+        url: https://packages.wazuh.com/key/GPG-KEY-WAZUH
+        state: present
+      tags: ['install']
+
+    - name: Add Wazuh repository
+      apt_repository:
+        repo: "deb https://packages.wazuh.com/4.x/apt/ stable main"
+        state: present
+        filename: wazuh
+      tags: ['install']
+
+    - name: Install Wazuh agent
+      apt:
+        name: wazuh-agent
+        state: present
+        update_cache: yes
+      environment:
+        WAZUH_MANAGER: "{{ wazuh_manager_ip }}"
+        WAZUH_AGENT_GROUP: "{{ wazuh_agent_group }}"
+      tags: ['install']
+
+    - name: Configure Wazuh agent manager address
+      lineinfile:
+        path: /var/ossec/etc/ossec.conf
+        regexp: '<address>.*</address>'
+        line: "      <address>{{ wazuh_manager_ip }}</address>"
+        backrefs: yes
+      notify:
+        - Restart Wazuh agent
+      tags: ['configure']
+
+    - name: Enable and start Wazuh agent
+      service:
+        name: wazuh-agent
+        state: started
+        enabled: yes
+      tags: ['start']
+
+  handlers:
+    - name: Restart Wazuh agent
+      service:
+        name: wazuh-agent
+        state: restarted

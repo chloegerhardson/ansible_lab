@@ -1,0 +1,85 @@
+---
+- name: Install Wazuh Server (All-in-One)
+  hosts: wazuh_server
+  become: yes
+
+  vars:
+    wazuh_version: "4.9"
+
+  tasks:
+    - name: Check minimum RAM (4GB recommended)
+      assert:
+        that:
+          - ansible_memtotal_mb >= 3500
+        fail_msg: "Wazuh server requires at least 4GB RAM. Found: {{ ansible_memtotal_mb }}MB"
+        success_msg: "RAM check passed: {{ ansible_memtotal_mb }}MB"
+      tags: ['check']
+
+    - name: Install dependencies
+      apt:
+        name:
+          - curl
+          - tar
+        state: present
+        update_cache: yes
+      tags: ['install']
+
+    - name: Download Wazuh installation assistant
+      get_url:
+        url: "https://packages.wazuh.com/{{ wazuh_version }}/wazuh-install.sh"
+        dest: /tmp/wazuh-install.sh
+        mode: '0755'
+      tags: ['install']
+
+    - name: Download Wazuh config file
+      get_url:
+        url: "https://packages.wazuh.com/{{ wazuh_version }}/config.yml"
+        dest: /tmp/config.yml
+        mode: '0644'
+      tags: ['install']
+
+    - name: Configure node IP in config.yml
+      replace:
+        path: /tmp/config.yml
+        regexp: '<indexer-node-ip>'
+        replace: "{{ ansible_default_ipv4.address }}"
+      tags: ['configure']
+
+    - name: Configure server IP in config.yml
+      replace:
+        path: /tmp/config.yml
+        regexp: '<wazuh-manager-ip>'
+        replace: "{{ ansible_default_ipv4.address }}"
+      tags: ['configure']
+
+    - name: Configure dashboard IP in config.yml
+      replace:
+        path: /tmp/config.yml
+        regexp: '<dashboard-node-ip>'
+        replace: "{{ ansible_default_ipv4.address }}"
+      tags: ['configure']
+
+    - name: Run Wazuh installation (this takes several minutes)
+      shell: bash /tmp/wazuh-install.sh -a -i
+      args:
+        creates: /var/ossec/bin/wazuh-control
+      register: wazuh_install
+      tags: ['install']
+      async: 1800
+      poll: 30
+
+    - name: Extract admin password from install files
+      shell: "tar -O -xf /tmp/wazuh-install-files.tar wazuh-install-files/wazuh-passwords.txt 2>/dev/null | grep -A1 'indexer_username' | tail -1 | tr -d ' '"
+      register: admin_password
+      changed_when: false
+      tags: ['install']
+
+    - name: Display Wazuh dashboard access info
+      debug:
+        msg:
+          - "=========================================="
+          - "Wazuh Dashboard: https://{{ ansible_default_ipv4.address }}"
+          - "Username: admin"
+          - "Password: {{ admin_password.stdout }}"
+          - "=========================================="
+      tags: ['install']

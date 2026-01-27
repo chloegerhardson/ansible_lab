@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
 
   # Define machines
   nodes = {
-    "head" => { memory: 2048, cpus: 2 },
+    "head" => { memory: 4096, cpus: 2 },
     "compute1" => { memory: 2048, cpus: 2 },
     "compute2" => { memory: 2048, cpus: 2 },
     "webserver" => {memory: 2048, cpus: 2 }
